@@ -61,16 +61,16 @@ class MediaStreamTrackWeb extends MediaStreamTrack {
   @override
   Future<ByteBuffer> captureFrame() async {
     final imageCapture = html.ImageCapture(jsTrack);
-    final bitmap = await imageCapture.grabFrame();
     final canvas = html.CanvasElement();
     canvas.width = bitmap.width;
     canvas.height = bitmap.height;
     final renderer =
-        canvas.getContext('bitmaprenderer') as html.ImageBitmapRenderingContext;
+    canvas.getContext('bitmaprenderer') as html.ImageBitmapRenderingContext;
+    // renderer.transferFromImageBitmap(bitmap);
     js.callMethod(renderer, 'transferFromImageBitmap', [bitmap]);
     final blod = await canvas.toBlob();
     var array =
-        await js.promiseToFuture(js.callMethod(blod, 'arrayBuffer', []));
+    await js.promiseToFuture(js.callMethod(blod, 'arrayBuffer', []));
     bitmap.close();
     return array;
   }
